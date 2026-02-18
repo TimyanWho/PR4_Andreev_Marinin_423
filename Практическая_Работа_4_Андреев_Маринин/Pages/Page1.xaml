@@ -1,0 +1,31 @@
+﻿<Page x:Class="Практическая_Работа_4_Андреев_Маринин.Pages.Page1"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Страница 1">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <Label Content="x:" VerticalAlignment="Center"/>
+            <TextBox x:Name="TbX" Width="120" ToolTip="Введите x (число)"/>
+            <Label Content="y:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <TextBox x:Name="TbY" Width="120" ToolTip="Введите y (число)"/>
+            <Label Content="z:" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <TextBox x:Name="TbZ" Width="120" ToolTip="Введите z (число)"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
+            <Button Content="Вычислить" Click="BtnCalc_Click" Width="100"/>
+            <Button Content="Очистить" Click="BtnClear_Click" Width="100" Margin="8,0,0,0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2">
+            <Label Content="Результат t:"/>
+            <TextBox x:Name="TbResult" IsReadOnly="True" Height="30" FontSize="14"/>
+        </StackPanel>
+    </Grid>
+</Page>
