@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
-using System.Windows.Forms.DataVisualization.Charting; // add reference
-using System.Linq;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Media.Imaging;
 
 namespace Практическая_Работа_4_Андреев_Маринин.Pages
 {
@@ -11,10 +12,13 @@ namespace Практическая_Работа_4_Андреев_Маринин.
     {
         private Chart _chart;
 
+        private const string ImgPath = @"C:\Users\Timyan\source\repos\Практическая_Работа_4_Андреев_Маринин\Практическая_Работа_4_Андреев_Маринин\f3.png";
+
         public Page3()
         {
             InitializeComponent();
             InitializeChart();
+            LoadTopImage();
         }
 
         private void InitializeChart()
@@ -31,6 +35,28 @@ namespace Практическая_Работа_4_Андреев_Маринин.
             WfhChart.Child = _chart;
         }
 
+        private void LoadTopImage()
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(ImgPath) || !File.Exists(ImgPath))
+                {
+                    ImgTop3.Source = null;
+                    return;
+                }
+                var bi = new BitmapImage();
+                bi.BeginInit();
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                bi.UriSource = new Uri(ImgPath, UriKind.Absolute);
+                bi.EndInit();
+                ImgTop3.Source = bi;
+            }
+            catch
+            {
+                ImgTop3.Source = null;
+            }
+        }
+
         private void BtnCalc_Click(object sender, RoutedEventArgs e)
         {
             if (!TryParseAll(out double x0, out double xk, out double dx, out double a, out double b, out double c)) return;
@@ -39,7 +65,6 @@ namespace Практическая_Работа_4_Андреев_Маринин.
             _chart.Series["y"].Points.Clear();
             TbList.Clear();
 
-            // y = (10 - 2*b*c) / x + cos( sqrt(a^3 * x) )
             for (double x = x0; (dx > 0) ? x <= xk + 1e-9 : x >= xk - 1e-9; x += dx)
             {
                 double denomX = x;
@@ -47,7 +72,7 @@ namespace Практическая_Работа_4_Андреев_Маринин.
                 double insideSqrt = a * a * a * x; // a^3 * x
                 double part2 = double.NaN;
                 if (insideSqrt >= 0) part2 = Math.Cos(Math.Sqrt(insideSqrt));
-                else part2 = Math.Cos(Math.Sqrt(Math.Abs(insideSqrt))); // если отрицательно — берем abs
+                else part2 = Math.Cos(Math.Sqrt(Math.Abs(insideSqrt)));
                 double y = part1 + part2;
 
                 _chart.Series["y"].Points.AddXY(x, y);
@@ -65,7 +90,7 @@ namespace Практическая_Работа_4_Андреев_Маринин.
                    && double.TryParse(TbB.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out b)
                    && double.TryParse(TbC.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out c);
 
-            if (!ok) MessageBox.Show("Проверьте все поля — требуется число (используйте точку или запятую).");
+            if (!ok) MessageBox.Show("Проверьте все поля — требуется число.");
             return ok;
         }
 
