@@ -60,23 +60,45 @@ namespace Практическая_Работа_4_Андреев_Маринин.
         private void BtnCalc_Click(object sender, RoutedEventArgs e)
         {
             if (!TryParseAll(out double x0, out double xk, out double dx, out double a, out double b, out double c)) return;
-            if (dx == 0) { MessageBox.Show("dx не может быть 0"); return; }
+            if (Math.Abs(dx) < 1e-15) { MessageBox.Show("dx не может быть 0", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
 
             _chart.Series["y"].Points.Clear();
             TbList.Clear();
 
-            for (double x = x0; (dx > 0) ? x <= xk + 1e-9 : x >= xk - 1e-9; x += dx)
+            for (double x = x0; (dx > 0) ? x <= xk + 1e-12 : x >= xk - 1e-12; x += dx)
             {
-                double denomX = x;
-                double part1 = (10.0 - 2.0 * b * c) / denomX;
+                if (Math.Abs(x) < 1e-15)
+                {
+                    TbList.AppendText($"x={x:G6}   y=undefined (деление на 0)\r\n");
+                    continue;
+                }
+
+                double part1 = (10.0 - 2.0 * b * c) / x;
                 double insideSqrt = a * a * a * x; // a^3 * x
-                double part2 = double.NaN;
+                double part2;
+
                 if (insideSqrt >= 0) part2 = Math.Cos(Math.Sqrt(insideSqrt));
                 else part2 = Math.Cos(Math.Sqrt(Math.Abs(insideSqrt)));
-                double y = part1 + part2;
 
-                _chart.Series["y"].Points.AddXY(x, y);
-                TbList.AppendText($"x={x:G6}   y={y:G6}\r\n");
+                double yVal = part1 + part2;
+
+                if (double.IsNaN(yVal) || double.IsInfinity(yVal) || Math.Abs(yVal) > 1e150)
+                {
+                    TbList.AppendText($"x={x:G6}   y=invalid ({yVal})\r\n");
+                    continue;
+                }
+
+                _chart.Series["y"].Points.AddXY(x, yVal);
+                TbList.AppendText($"x={x:G6}   y={yVal:G6}\r\n");
+            }
+
+            try
+            {
+                _chart.ChartAreas["Main"].RecalculateAxesScale();
+            }
+            catch
+            {
+
             }
         }
 
