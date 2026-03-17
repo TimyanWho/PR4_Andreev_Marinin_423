@@ -5,11 +5,8 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
-            <!-- картинка -->
             <RowDefinition Height="Auto"/>
-            <!-- вводы -->
             <RowDefinition Height="Auto"/>
-            <!-- переключатели -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -28,7 +25,6 @@
             <TextBox x:Name="TbResult" Width="200" IsReadOnly="True" Margin="4" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <!-- три переключателя (в методичке: 3 варианта f(x)) -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
             <RadioButton x:Name="RbSinh" Content="sh(x) = sinh(x)" IsChecked="True" Margin="6" GroupName="FuncGroup"/>
             <RadioButton x:Name="RbSquare" Content="x^2" Margin="6" GroupName="FuncGroup"/>

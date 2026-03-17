@@ -5,11 +5,8 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
-            <!-- картинка -->
             <RowDefinition Height="Auto"/>
-            <!-- вводы -->
             <RowDefinition Height="*"/>
-            <!-- место для содержимого -->
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="1" Background="WhiteSmoke" Padding="6">

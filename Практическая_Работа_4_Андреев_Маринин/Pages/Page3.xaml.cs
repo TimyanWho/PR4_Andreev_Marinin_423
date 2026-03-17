@@ -12,7 +12,7 @@ namespace Практическая_Работа_4_Андреев_Маринин.
     {
         private Chart _chart;
 
-        private const string ImgPath = @"C:\Users\Timyan\source\repos\Практическая_Работа_4_Андреев_Маринин\Практическая_Работа_4_Андреев_Маринин\f3.png";
+        private const string ImgPath = "../../f3.png";
 
         public Page3()
         {
@@ -44,10 +44,11 @@ namespace Практическая_Работа_4_Андреев_Маринин.
                     ImgTop3.Source = null;
                     return;
                 }
+
                 var bi = new BitmapImage();
                 bi.BeginInit();
                 bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.UriSource = new Uri(ImgPath, UriKind.Absolute);
+                bi.UriSource = new Uri(ImgPath, UriKind.RelativeOrAbsolute);
                 bi.EndInit();
                 ImgTop3.Source = bi;
             }
@@ -60,27 +61,27 @@ namespace Практическая_Работа_4_Андреев_Маринин.
         private void BtnCalc_Click(object sender, RoutedEventArgs e)
         {
             if (!TryParseAll(out double x0, out double xk, out double dx, out double a, out double b, out double c)) return;
-            if (Math.Abs(dx) < 1e-15) { MessageBox.Show("dx не может быть 0", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
+            if (Math.Abs(dx) < 1e-15)
+            {
+                MessageBox.Show("dx не может быть 0", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             _chart.Series["y"].Points.Clear();
             TbList.Clear();
 
             for (double x = x0; (dx > 0) ? x <= xk + 1e-12 : x >= xk - 1e-12; x += dx)
             {
-                if (Math.Abs(x) < 1e-15)
+                bool ok = Calculations.TryComputeY(x, a, b, c, out double yVal);
+
+                if (!ok)
                 {
-                    TbList.AppendText($"x={x:G6}   y=undefined (деление на 0)\r\n");
+                    if (Math.Abs(x) < 1e-12)
+                        TbList.AppendText($"x={x:G6}   y=undefined (деление на 0)\r\n");
+                    else
+                        TbList.AppendText($"x={x:G6}   y=invalid\r\n");
                     continue;
                 }
-
-                double part1 = (10.0 - 2.0 * b * c) / x;
-                double insideSqrt = a * a * a * x; // a^3 * x
-                double part2;
-
-                if (insideSqrt >= 0) part2 = Math.Cos(Math.Sqrt(insideSqrt));
-                else part2 = Math.Cos(Math.Sqrt(Math.Abs(insideSqrt)));
-
-                double yVal = part1 + part2;
 
                 if (double.IsNaN(yVal) || double.IsInfinity(yVal) || Math.Abs(yVal) > 1e150)
                 {
@@ -98,7 +99,7 @@ namespace Практическая_Работа_4_Андреев_Маринин.
             }
             catch
             {
-
+                // тихо игнорируем сбой рескейла, чтобы приложение не падало
             }
         }
 

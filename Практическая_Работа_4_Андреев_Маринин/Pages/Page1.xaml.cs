@@ -8,27 +8,28 @@ namespace Практическая_Работа_4_Андреев_Маринин.
 {
     public partial class Page1 : Page
     {
-        private const string ImgPath = @"C:\Users\Timyan\source\repos\Практическая_Работа_4_Андреев_Маринин\Практическая_Работа_4_Андреев_Маринин\f1.png";
-
         public Page1()
         {
             InitializeComponent();
             LoadTopImage();
         }
 
+        private const string ImgPath = "../../f1.png";
+
         private void LoadTopImage()
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(ImgPath) || !File.Exists(ImgPath))
+                if (!File.Exists(ImgPath))
                 {
                     ImgTop1.Source = null;
                     return;
                 }
+
                 var bi = new BitmapImage();
                 bi.BeginInit();
                 bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.UriSource = new Uri(ImgPath, UriKind.Absolute);
+                bi.UriSource = new Uri(ImgPath, UriKind.Relative);
                 bi.EndInit();
                 ImgTop1.Source = bi;
             }
@@ -50,18 +51,17 @@ namespace Практическая_Работа_4_Андреев_Маринин.
         {
             if (!TryParse(TbX.Text, out double x) || !TryParse(TbY.Text, out double y) || !TryParse(TbZ.Text, out double z))
             {
-                MessageBox.Show("Введите корректные числовые значения для x, y и z.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Введите корректные числа для x, y и z.");
                 return;
             }
 
-            try
+            if (Calculations.TryComputeT(x, y, z, out double t))
             {
-                double t = ComputeT(x, y, z);
                 TbResult.Text = t.ToString("G6");
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Ошибка при вычислении: " + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                TbResult.Text = "invalid";
             }
         }
 

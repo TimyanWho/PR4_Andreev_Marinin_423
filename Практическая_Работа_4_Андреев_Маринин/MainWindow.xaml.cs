@@ -8,7 +8,7 @@ namespace Практическая_Работа_4_Андреев_Маринин
         public MainWindow()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Pages.Page1()); // стартовая страница
+            MainFrame.Navigate(new Pages.Page1());
         }
 
         private void BtnPage1_Click(object sender, RoutedEventArgs e) => MainFrame.Navigate(new Pages.Page1());
