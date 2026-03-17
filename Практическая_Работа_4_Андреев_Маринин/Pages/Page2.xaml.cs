@@ -39,13 +39,13 @@ namespace Практическая_Работа_4_Андреев_Маринин.
             }
         }
 
-        private void BtnCalc_Click(object sender, RoutedEventArgs e)
-        {
-            if (!TryParse(TbX.Text, out double x) || !TryParse(TbY.Text, out double y))
+            private void BtnCalc_Click(object sender, RoutedEventArgs e)
             {
-                MessageBox.Show("Введите корректные числовые значения x и y.", "Ошибка ввода", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+                if (!TryParse(TbX.Text, out double x) || !TryParse(TbY.Text, out double y))
+                {
+                    MessageBox.Show("Введите корректные числовые значения x и y.", "Ошибка ввода", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
             int functionType = RbSinh.IsChecked == true ? 0 : (RbSquare.IsChecked == true ? 1 : 2);
 
