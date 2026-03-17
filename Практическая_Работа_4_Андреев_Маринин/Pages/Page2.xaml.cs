@@ -8,37 +8,38 @@ namespace Практическая_Работа_4_Андреев_Маринин.
     {
         public partial class Page2 : Page
         {
-            private const string ImgPath = @"C:\Users\Timyan\source\repos\Практическая_Работа_4_Андреев_Маринин\Практическая_Работа_4_Андреев_Маринин\f2.png";
-
             public Page2()
             {
                 InitializeComponent();
                 LoadTopImage();
             }
 
-            private void LoadTopImage()
+        private const string ImgPath = "../../f2.png";
+
+        private void LoadTopImage()
+        {
+            try
             {
-                try
-                {
-                    if (string.IsNullOrWhiteSpace(ImgPath) || !File.Exists(ImgPath))
-                    {
-                        ImgTop2.Source = null;
-                        return;
-                    }
-                    var bi = new BitmapImage();
-                    bi.BeginInit();
-                    bi.CacheOption = BitmapCacheOption.OnLoad;
-                    bi.UriSource = new Uri(ImgPath, UriKind.Absolute);
-                    bi.EndInit();
-                    ImgTop2.Source = bi;
-                }
-                catch
+                if (!File.Exists(ImgPath))
                 {
                     ImgTop2.Source = null;
+                    return;
                 }
-            }
 
-            private void BtnCalc_Click(object sender, RoutedEventArgs e)
+                var bi = new BitmapImage();
+                bi.BeginInit();
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                bi.UriSource = new Uri(ImgPath, UriKind.Relative);
+                bi.EndInit();
+                ImgTop2.Source = bi;
+            }
+            catch
+            {
+                ImgTop2.Source = null;
+            }
+        }
+
+        private void BtnCalc_Click(object sender, RoutedEventArgs e)
             {
                 if (!TryParse(TbX.Text, out double x) || !TryParse(TbY.Text, out double y))
                 {

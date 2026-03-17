@@ -12,8 +12,6 @@ namespace Практическая_Работа_4_Андреев_Маринин.
     {
         private Chart _chart;
 
-        private const string ImgPath = @"C:\Users\Timyan\source\repos\Практическая_Работа_4_Андреев_Маринин\Практическая_Работа_4_Андреев_Маринин\f3.png";
-
         public Page3()
         {
             InitializeComponent();
@@ -35,19 +33,22 @@ namespace Практическая_Работа_4_Андреев_Маринин.
             WfhChart.Child = _chart;
         }
 
+        private const string ImgPath = "../../f3.png";
+
         private void LoadTopImage()
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(ImgPath) || !File.Exists(ImgPath))
+                if (!File.Exists(ImgPath))
                 {
                     ImgTop3.Source = null;
                     return;
                 }
+
                 var bi = new BitmapImage();
                 bi.BeginInit();
                 bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.UriSource = new Uri(ImgPath, UriKind.Absolute);
+                bi.UriSource = new Uri(ImgPath, UriKind.Relative);
                 bi.EndInit();
                 ImgTop3.Source = bi;
             }
